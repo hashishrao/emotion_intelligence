@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Dashboard</h1>
+    <h2>Emotion Recognition</h2>
+    <img src="{{ url_for('video_feed') }}" alt="Video Feed">
+    <h2>Emotion Suggestions</h2>
+    <button onclick="fetchSuggestions()">Get Suggestions</button>
+    <div id="suggestions"></div>
+    <h2>Emotion Stats</h2>
+    <img src="{{ url_for('emotion_stats') }}" alt="Emotion Stats">
+    <h2>Audio Levels</h2>
+    <img src="{{ url_for('audio_levels') }}" alt="Audio Levels">
+    <h2>Parkinson's Prediction</h2>
+    <button onclick="fetchParkinsonsPrediction()">Predict Parkinson's</button>
+    <div id="parkinsons_result"></div>
+    <script>
+        function fetchSuggestions() {
+            fetch('/emotion_suggestions')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('suggestions').innerText = 
+                        `Dominant Emotion: ${data.dominant_emotion}\nSuggestions: ${data.suggestions.join(', ')}`;
+                });
+        }
+
+        function fetchParkinsonsPrediction() {
+            fetch('/parkinsons_prediction', {method: 'POST'})
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('parkinsons_result').innerText = data.result;
+                });
+        }
+    </script>
+</body>
+</html>
